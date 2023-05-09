@@ -1,0 +1,5 @@
+export {MainBanner} from './MainBanner'
+export {TopSelling} from './TopSelling/TopSelling'
+export {AboutUs} from './AboutUs/AboutUs'
+export {Reviews} from './Reviews/Reviews'
+export {Footer} from './Footer/Footer'
