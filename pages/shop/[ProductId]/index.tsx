@@ -8,7 +8,8 @@ import isAlreadyInCart from "@/actions/isAlreadyInCart";
 import { Dropdown_down, Loading } from "@/public/svg";
 import { CartInterface, ProductInterface } from "@/types";
 import axios from "axios";
-import { GetServerSidePropsContext, NextPage } from "next";
+import { GetServerSidePropsContext } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -34,14 +35,22 @@ function Index({
   description,
   image,
   price,
+
 }: ProductProps) {
   const [recommended, setRecommended] = useState<ProductInterface[]>();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInCart,setIsInCart] = useState<boolean>(false)
+  const {data:userData} = useSession()
 
   const ProductId = router.query.ProductId as string;
 
-  const { data: isInCart } = isAlreadyInCart(ProductId);
+
+  if(userData){
+    const { data } = isAlreadyInCart(ProductId);
+    setIsInCart(data.alreadyInCart)
+  }
+
 
   useEffect(() => {
     if (id)
@@ -86,7 +95,7 @@ function Index({
 
   const handleToCart = () => {
     setIsLoading(true);
-    if (!isInCart.alreadyInCart) {
+    if (!isInCart ) {
       axios
         .post("/api/product/toCart", {
           quantity: cartData.quantity,
@@ -164,20 +173,22 @@ function Index({
                 </div>
               </div>
               <SecondaryButton label="Buy now" full onClick={() => {}} />
+              { userData &&
 
-              <SecondaryButton
+                <SecondaryButton
                 label={
                   isInCart
-                    ? isInCart.alreadyInCart
-                      ? "Remove from cart"
-                      : `Add to Cart`
+                  ? isInCart
+                  ? "Remove from cart"
+                  : `Add to Cart`
                     : "...Loading"
-                }
-                outline
-                full
-                onClick={handleToCart}
-                disabled={isLoading}
+                  }
+                  outline
+                  full
+                  onClick={handleToCart}
+                  disabled={isLoading}
               />
+            }
             </div>
           </div>
         </Container>
@@ -263,9 +274,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { ProductId: productId } = item as { ProductId: string };
 
   let product = {};
-  
+
   try {
-    const fetch = await (await axios.post(`https://${host}/api/product/getById`, { productId })).data
+    const fetch = await (await axios.post(`http://${host}/api/product/getById`, { productId })).data
     product = fetch
   }catch {
     return {
@@ -275,7 +286,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   return {
     props: {
-      ...product,
+      ...product,   
     },
   };
 };
