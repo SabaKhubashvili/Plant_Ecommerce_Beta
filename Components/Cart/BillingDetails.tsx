@@ -156,7 +156,7 @@ export const BillingDetails = () => {
                     </div>
                   </div>
 
-              <div className=' flex justify-end items-end '>
+              <div className=' flex justify-end items-end pt-[10px]  '>
 
               <SecondaryButton full label='Place Order' onClick={handleSubmit(onSubmit)}/>
               </div>
