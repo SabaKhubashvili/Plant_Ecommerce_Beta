@@ -265,7 +265,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   let product = {};
   
   try {
-    const fetch = await (await axios.post(`http://${host}/api/product/getById`, { productId })).data
+    const fetch = await (await axios.post(`https://${host}/api/product/getById`, { productId })).data
     product = fetch
   }catch {
     return {
