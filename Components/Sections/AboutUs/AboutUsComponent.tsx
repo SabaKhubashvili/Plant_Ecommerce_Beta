@@ -1,11 +1,11 @@
-import { CategoriesHomeComponent } from "@/types";
+import { AboutHomeComponent } from "@/types";
 import React from "react";
 
 export const AboutUsComponent = ({
   icon,
   title,
   desc,
-}: CategoriesHomeComponent) => {
+}: AboutHomeComponent) => {
   return (
     <div className="flex justify-center items-center flex-col gap-4 basis-1/3 h-[14rem]">
         <div className="bg-[#C1DCDC] p-5 rounded-full">
